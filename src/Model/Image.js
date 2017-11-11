@@ -1,9 +1,10 @@
 import DataBaseConnection from '../DAO/DataBaseConnection.js';
+import ErrorConstants from '../Output/ErrorConstants.js';
 
 export default class Image {
 
-    constructor(idImage, photo, description, title, comment, user) {
-        this.idImage = idImage;
+    constructor(photo, description, title, comment, user) {
+        //this.idImage;
         this.photo = photo;
         this.description = description;
         this.title = title;
@@ -11,10 +12,25 @@ export default class Image {
         this.user = user;
     }
 
-    static create() {
+    static async create(photo, description, title, comment, user) {
+
         var db = new DataBaseConnection();
-        
-        
+        var newImage = new Image(photo, description, title, comment, user);
+
+        if (newImage.validateImage()) {
+
+            try {
+
+                var message = await db.insertImage(newImage);
+                return ({ 'message': message });
+
+            } catch (error) {
+                return ({ 'error': error });
+            }
+
+        } else {
+            return ({ 'error': ErrorConstants.invalid_image_information });
+        }
     }
 
     static search() {
@@ -69,5 +85,17 @@ export default class Image {
         return this.comment;
     }
 
+    validateImage() {
 
+        if (!this.user.validateUser()) {
+            return false;
+        } else if (!this.photo || !this.description || !this.title || !this.comment) {
+
+            return false;
+        } else if (!((this.title.length >= 5 && this.title.length <= 20) && (this.comment.length > 0 && this.comment.length <= 255) && (this.description.length > 0 && this.description.length <= 255))) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }

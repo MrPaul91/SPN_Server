@@ -160,6 +160,43 @@ var User = function (_Person) {
         set: function set(albumCollection) {
             this.albumCollection = albumCollection;
         }
+    }], [{
+        key: 'getUser',
+        value: function () {
+            var _ref2 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee2(username) {
+                var db, result;
+                return _regenerator2.default.wrap(function _callee2$(_context2) {
+                    while (1) {
+                        switch (_context2.prev = _context2.next) {
+                            case 0:
+                                db = new _DataBaseConnection2.default();
+                                _context2.prev = 1;
+                                _context2.next = 4;
+                                return db.getUser(username);
+
+                            case 4:
+                                result = _context2.sent;
+                                return _context2.abrupt('return', new User(result.personId, result.name, result.username, result.avatar, result.password, result.email));
+
+                            case 8:
+                                _context2.prev = 8;
+                                _context2.t0 = _context2['catch'](1);
+                                return _context2.abrupt('return', { 'error': _context2.t0 });
+
+                            case 11:
+                            case 'end':
+                                return _context2.stop();
+                        }
+                    }
+                }, _callee2, this, [[1, 8]]);
+            }));
+
+            function getUser(_x) {
+                return _ref2.apply(this, arguments);
+            }
+
+            return getUser;
+        }()
     }]);
     return User;
 }(_Person3.default);

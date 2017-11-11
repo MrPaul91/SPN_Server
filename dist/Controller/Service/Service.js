@@ -64,7 +64,7 @@ var Service = function () {
             this.app.post('/LogIn', _LogIn2.default); //Bien
             this.app.post('/InsertUser', _InsertUser2.default); //Bien
             this.app.post('/InsertImage', _InsertImage2.default);
-            this.app.get('/Image/Profile/:name', _ProfileImage2.default);
+            this.app.get('/Image/Profile/:name', _ProfileImage2.default); //Bien
 
             this.app.listen(1337, function () {
                 console.log('Listening on port 1337');

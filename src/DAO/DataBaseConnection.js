@@ -48,8 +48,9 @@ export default class DataBaseConnection {
                                 if (error) {
                                     this.connection.rollback(() => { reject(ErrorConstants.user_exists); });
                                 } else {
-                                    var path = "./Image/Profile/" + user.username + user.avatar.extension;
 
+                                    var path = "./Image/Profile/" + user.username + user.avatar.extension;
+                                    
                                     DataBaseConnection.insertFile(path, user.avatar.file, 'base64')
                                         .then(value => {
                                             this.connection.commit((error) => {
@@ -59,7 +60,7 @@ export default class DataBaseConnection {
                                                     this.connection.end();
                                                     resolve(MessageConstants.user_created);
                                                 }
-                                            })
+                                            });
                                         })
                                         .catch(error => {
                                             this.connection.rollback(() => { reject(ErrorConstants.image_creation_error); });
@@ -100,6 +101,24 @@ export default class DataBaseConnection {
 
     }
 
+    getUser(username) {
+
+        return new Promise((resolve, reject) => {
+            this.connection.query("SELECT * FROM user,person WHERE username = '" + username + "' AND user.person = person.personId", (error, result, fields) => {
+
+                if (error) {
+                    reject(ErrorConstants.data_base_error);
+                } else {
+                    if (result.length > 0) {
+                        resolve(result[0]);
+                    } else {
+                        reject(ErrorConstants.username_does_not_exists);
+                    }
+                }
+            });
+        })
+    }
+
     createSession(session) {
         return new Promise((resolve, reject) => {
 
@@ -130,15 +149,39 @@ export default class DataBaseConnection {
     }
 
     insertImage(image) {
+
         return new Promise((resolve, reject) => {
-            this.connection.query("INSERT INTO image VALUES('" + image.idImage + "','./DAO/Image/Album/" + image.idImage + image.photo.extension + "','" + image.description + "','" + image.title + "','" + image.comment + "','" + image.user.personId + "')", (error, result) => {
+            this.connection.beginTransaction((error) => {
 
                 if (error) {
-                    reject(ErrorConstants.data_base_error);
+                    this.connection.rollback(() => { reject(ErrorConstants.data_base_error); });
                 } else {
+                    var query = "INSERT INTO image(directory, extension, description, title,comment, user) VALUES ('/Image/Album/','" + image.photo.extension + "', '" + image.description + "', '" + image.title + "','" + image.comment + "', '" + image.user.personId + "')";
+                    this.connection.query(query, (error, result) => {
+                        if (error) {
+                            this.connection.rollback(() => { reject(ErrorConstants.data_base_error); });
+                        } else {
 
-                    //Insert Image in the server
+                            var path = "./Image/Album/" + result.insertId + image.photo.extension;
+
+                            DataBaseConnection.insertFile(path, image.photo.file , 'base64')
+                            .then(value => {
+                                this.connection.commit((error) => {
+                                    if (error) {
+                                        this.connection.rollback(() => { reject(ErrorConstants.data_base_error); });
+                                    } else {
+                                        this.connection.end();
+                                        resolve(MessageConstants.image_created);
+                                    }
+                                });
+                            })
+                            .catch(error => {
+                                this.connection.rollback(() => { reject(ErrorConstants.image_creation_error); });
+                            })
+                        }
+                    });
                 }
+
             });
         });
     }
@@ -152,6 +195,7 @@ export default class DataBaseConnection {
                 if (error) {
                     reject(false);
                 } else {
+
                     resolve(true);
                 }
             })

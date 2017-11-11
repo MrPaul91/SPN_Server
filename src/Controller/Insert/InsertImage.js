@@ -1,6 +1,8 @@
 import requestIp from 'request-ip';
 import ErrorConstants from '../../Output/ErrorConstants.js';
 import Session from '../../Model/Session.js';
+import User from '../../Model/User.js';
+import Image from '../../Model/Image.js';
 
 export default async function (req, res) {
 
@@ -10,16 +12,31 @@ export default async function (req, res) {
     var comment = req.body.comment;
     var username = req.body.username;
     var sessionId = req.body.sessionId;
-    var IP = requestIp.getClientIp(req);;
+    var IP = requestIp.getClientIp(req);
 
     var newSession = await Session.search(sessionId);
 
-    if (photo && description && title && comment && username & sessionId && IP) {
-        if (!newSession.error) {
+    if (photo && description && title && comment && username && sessionId && IP) {
 
+        if (!newSession.error) {
             if (newSession.validateIP(IP, username)) {
 
-                
+                var imageOwner = await User.getUser(username);
+
+                if (!imageOwner.error) {
+
+                    var result = await Image.create(photo, description, title, comment, imageOwner);
+
+                    if (!result.error) {
+                        res.status(result.message.statusCode).send(JSON.stringify({ "message": result.message.name }));
+                    } else {
+                        res.status(result.error.statusCode).send(JSON.stringify({ "error": result.error.name }));
+                    }
+
+                } else {
+                    res.status(imageOwner.error.statusCode).send(JSON.stringify({ "error": imageOwner.error.name }));
+                }
+
             } else {
                 res.status(ErrorConstants.invalid_session.statusCode).send(JSON.stringify({ "error": ErrorConstants.invalid_session.name }));
             }

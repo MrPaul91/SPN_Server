@@ -73,6 +73,19 @@ export default class User extends Person {
         }
     }
 
+    static async getUser(username) {
+
+        var db = new DataBaseConnection();
+
+        try {
+            var result = await db.getUser(username);
+            return (new User(result.personId, result.name, result.username, result.avatar, result.password, result.email));
+        } catch (error) {
+
+            return ({ 'error': error });
+        }
+    }
+
     userToString() {
         return ({ "person": this.personToString(), "username": this.username, "avatar": this.avatar, "email": this.email });
     }

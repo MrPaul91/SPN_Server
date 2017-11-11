@@ -13,6 +13,7 @@ export default {
     session_exists: new Output("session_exists", 400),
     session_does_not_exists: new Output("session_does_not_exists", 400),
     invalid_session: new Output("invalid_session", 401),
+    invalid_image_information: new Output("invalid_image_information", 400),
     
     /*
     
@@ -27,7 +28,7 @@ export default {
     missing_information: new Error("missing_information", 400),
     invalid_person_information: new Error("invalid_person_information", 400),
     invalid_user_information: new Error("invalid_user_information", 400),
-    invalid_image_information: new Error("invalid_image_information", 400),
+    
     invalid_album_information: new Error("invalid_album_information", 400),
     invalid_albumximage_information: new Error("invalid_albumximage_information", 400),
     

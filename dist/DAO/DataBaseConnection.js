@@ -103,6 +103,7 @@ var DataBaseConnection = function () {
                                                                 reject(_ErrorConstants2.default.user_exists);
                                                             });
                                                         } else {
+
                                                             var path = "./Image/Profile/" + user.username + user.avatar.extension;
 
                                                             DataBaseConnection.insertFile(path, user.avatar.file, 'base64').then(function (value) {
@@ -169,13 +170,33 @@ var DataBaseConnection = function () {
             });
         }
     }, {
-        key: 'createSession',
-        value: function createSession(session) {
+        key: 'getUser',
+        value: function getUser(username) {
             var _this3 = this;
 
             return new _promise2.default(function (resolve, reject) {
+                _this3.connection.query("SELECT * FROM user,person WHERE username = '" + username + "' AND user.person = person.personId", function (error, result, fields) {
 
-                _this3.connection.query("INSERT INTO session VALUES('" + session.sessionId + "', '" + session.status + "', '" + session.IP + "', '" + session.user.personId + "')", function (error, result, fields) {
+                    if (error) {
+                        reject(_ErrorConstants2.default.data_base_error);
+                    } else {
+                        if (result.length > 0) {
+                            resolve(result[0]);
+                        } else {
+                            reject(_ErrorConstants2.default.username_does_not_exists);
+                        }
+                    }
+                });
+            });
+        }
+    }, {
+        key: 'createSession',
+        value: function createSession(session) {
+            var _this4 = this;
+
+            return new _promise2.default(function (resolve, reject) {
+
+                _this4.connection.query("INSERT INTO session VALUES('" + session.sessionId + "', '" + session.status + "', '" + session.IP + "', '" + session.user.personId + "')", function (error, result, fields) {
 
                     if (error) {
                         reject(_ErrorConstants2.default.session_exists);
@@ -188,11 +209,11 @@ var DataBaseConnection = function () {
     }, {
         key: 'getSession',
         value: function getSession(sessionId) {
-            var _this4 = this;
+            var _this5 = this;
 
             return new _promise2.default(function (resolve, reject) {
 
-                _this4.connection.query("SELECT * FROM user, session, person WHERE user.person = session.user AND user.person = person.personId AND session.sessionId = '" + sessionId + "'", function (error, result, fields) {
+                _this5.connection.query("SELECT * FROM user, session, person WHERE user.person = session.user AND user.person = person.personId AND session.sessionId = '" + sessionId + "'", function (error, result, fields) {
                     if (error) {
                         reject(_ErrorConstants2.default.data_base_error);
                     } else if (result.length > 0) {
@@ -206,16 +227,44 @@ var DataBaseConnection = function () {
     }, {
         key: 'insertImage',
         value: function insertImage(image) {
-            var _this5 = this;
+            var _this6 = this;
 
             return new _promise2.default(function (resolve, reject) {
-                _this5.connection.query("INSERT INTO image VALUES('" + image.idImage + "','./DAO/Image/Album/" + image.idImage + image.photo.extension + "','" + image.description + "','" + image.title + "','" + image.comment + "','" + image.user.personId + "')", function (error, result) {
+                _this6.connection.beginTransaction(function (error) {
 
                     if (error) {
-                        reject(_ErrorConstants2.default.data_base_error);
+                        _this6.connection.rollback(function () {
+                            reject(_ErrorConstants2.default.data_base_error);
+                        });
                     } else {
+                        var query = "INSERT INTO image(directory, extension, description, title,comment, user) VALUES ('/Image/Album/','" + image.photo.extension + "', '" + image.description + "', '" + image.title + "','" + image.comment + "', '" + image.user.personId + "')";
+                        _this6.connection.query(query, function (error, result) {
+                            if (error) {
+                                _this6.connection.rollback(function () {
+                                    reject(_ErrorConstants2.default.data_base_error);
+                                });
+                            } else {
 
-                        //Insert Image in the server
+                                var path = "./Image/Album/" + result.insertId + image.photo.extension;
+
+                                DataBaseConnection.insertFile(path, image.photo.file, 'base64').then(function (value) {
+                                    _this6.connection.commit(function (error) {
+                                        if (error) {
+                                            _this6.connection.rollback(function () {
+                                                reject(_ErrorConstants2.default.data_base_error);
+                                            });
+                                        } else {
+                                            _this6.connection.end();
+                                            resolve(_MessageConstants2.default.image_created);
+                                        }
+                                    });
+                                }).catch(function (error) {
+                                    _this6.connection.rollback(function () {
+                                        reject(_ErrorConstants2.default.image_creation_error);
+                                    });
+                                });
+                            }
+                        });
                     }
                 });
             });
@@ -231,6 +280,7 @@ var DataBaseConnection = function () {
                     if (error) {
                         reject(false);
                     } else {
+
                         resolve(true);
                     }
                 });

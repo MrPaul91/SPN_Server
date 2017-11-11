@@ -236,7 +236,7 @@ var Session = function () {
 
                             case 4:
                                 result = _context3.sent;
-                                newUser = new _User2.default(new _Person2.default(result.personId, result.name), result.username, result.avatar, result.password, result.email);
+                                newUser = new _User2.default(result.personId, result.name, result.username, result.avatar, result.password, result.email);
                                 newSession = new Session(result.sessionId, result.status, result.ip, newUser);
                                 return _context3.abrupt('return', newSession);
 

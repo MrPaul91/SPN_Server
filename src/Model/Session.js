@@ -61,7 +61,7 @@ export default class Session {
         try {
 
             var result = await db.getSession(sessionId);
-            var newUser = new User(new Person(result.personId, result.name), result.username, result.avatar, result.password, result.email);
+            var newUser = new User(result.personId, result.name, result.username, result.avatar, result.password, result.email);
             var newSession = new Session(result.sessionId, result.status, result.ip, newUser);
             return (newSession);
         } catch (error) {
