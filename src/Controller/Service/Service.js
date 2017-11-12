@@ -4,6 +4,7 @@ import LogIn from '../Query/LogIn.js';
 import InsertUser from '../Insert/InsertUser.js';
 import InsertImage from '../Insert/InsertImage.js';
 import ProfileImage from '../Query/ProfileImage.js'
+import AlbumImage from '../Query/AlbumImage.js'
 import cookieParser from 'cookie-parser';
 
 export default class Service {
@@ -24,8 +25,9 @@ export default class Service {
 
         this.app.post('/LogIn', LogIn); //Bien
         this.app.post('/InsertUser', InsertUser); //Bien
-        this.app.post('/InsertImage', InsertImage); 
+        this.app.post('/InsertImage', InsertImage); //Bien
         this.app.get('/Image/Profile/:name', ProfileImage);//Bien
+        this.app.get('/Image/Album/:name', AlbumImage);//Bien
 
         this.app.listen(1337, function () {
             console.log('Listening on port 1337');

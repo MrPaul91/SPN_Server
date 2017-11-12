@@ -36,6 +36,10 @@ var _ProfileImage = require('../Query/ProfileImage.js');
 
 var _ProfileImage2 = _interopRequireDefault(_ProfileImage);
 
+var _AlbumImage = require('../Query/AlbumImage.js');
+
+var _AlbumImage2 = _interopRequireDefault(_AlbumImage);
+
 var _cookieParser = require('cookie-parser');
 
 var _cookieParser2 = _interopRequireDefault(_cookieParser);
@@ -63,8 +67,9 @@ var Service = function () {
 
             this.app.post('/LogIn', _LogIn2.default); //Bien
             this.app.post('/InsertUser', _InsertUser2.default); //Bien
-            this.app.post('/InsertImage', _InsertImage2.default);
+            this.app.post('/InsertImage', _InsertImage2.default); //Bien
             this.app.get('/Image/Profile/:name', _ProfileImage2.default); //Bien
+            this.app.get('/Image/Album/:name', _AlbumImage2.default); //Bien
 
             this.app.listen(1337, function () {
                 console.log('Listening on port 1337');
