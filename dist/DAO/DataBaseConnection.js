@@ -269,6 +269,22 @@ var DataBaseConnection = function () {
                 });
             });
         }
+    }, {
+        key: 'getAlbums',
+        value: function getAlbums(username) {
+            var _this7 = this;
+
+            return new _promise2.default(function (resolve, reject) {
+
+                _this7.connection.query("SELECT albumId, name, description FROM album WHERE album.user = (SELECT user.person FROM user WHERE user.username = '" + username + "')", function (error, result, fields) {
+                    if (error) {
+                        reject(_ErrorConstants2.default.data_base_error);
+                    } else {
+                        resolve({ 'message': _MessageConstants2.default.albums_queried, 'Albums': result });
+                    }
+                });
+            });
+        }
     }], [{
         key: 'insertFile',
         value: function insertFile(path, data, option) {

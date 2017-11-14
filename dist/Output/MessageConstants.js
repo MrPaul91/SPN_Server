@@ -17,5 +17,6 @@ exports.default = {
     image_created: new _Output2.default('image_created', 200),
     albumximage_created: new _Output2.default('albumximage_created', 200),
     logIn_successful: new _Output2.default('logIn_successful', 200),
-    image_updated: new _Output2.default('image_updated', 200)
+    image_updated: new _Output2.default('image_updated', 200),
+    albums_queried: new _Output2.default('albums_queried', 200)
 };

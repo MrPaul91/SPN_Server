@@ -50,7 +50,7 @@ export default class DataBaseConnection {
                                 } else {
 
                                     var path = "./Image/Profile/" + user.username + user.avatar.extension;
-                                    
+
                                     DataBaseConnection.insertFile(path, user.avatar.file, 'base64')
                                         .then(value => {
                                             this.connection.commit((error) => {
@@ -164,25 +164,38 @@ export default class DataBaseConnection {
 
                             var path = "./Image/Album/" + result.insertId + image.photo.extension;
 
-                            DataBaseConnection.insertFile(path, image.photo.file , 'base64')
-                            .then(value => {
-                                this.connection.commit((error) => {
-                                    if (error) {
-                                        this.connection.rollback(() => { reject(ErrorConstants.data_base_error); });
-                                    } else {
-                                        this.connection.end();
-                                        resolve(MessageConstants.image_created);
-                                    }
-                                });
-                            })
-                            .catch(error => {
-                                this.connection.rollback(() => { reject(ErrorConstants.image_creation_error); });
-                            })
+                            DataBaseConnection.insertFile(path, image.photo.file, 'base64')
+                                .then(value => {
+                                    this.connection.commit((error) => {
+                                        if (error) {
+                                            this.connection.rollback(() => { reject(ErrorConstants.data_base_error); });
+                                        } else {
+                                            this.connection.end();
+                                            resolve(MessageConstants.image_created);
+                                        }
+                                    });
+                                })
+                                .catch(error => {
+                                    this.connection.rollback(() => { reject(ErrorConstants.image_creation_error); });
+                                })
                         }
                     });
                 }
 
             });
+        });
+    }
+
+    getAlbums(username) {
+        return new Promise((resolve, reject) => {
+
+            this.connection.query("SELECT albumId, name, description FROM album WHERE album.user = (SELECT user.person FROM user WHERE user.username = '" + username + "')", (error, result, fields) => {
+                if (error) {
+                    reject(ErrorConstants.data_base_error);
+                } else {
+                    resolve({ 'message': MessageConstants.albums_queried, 'Albums': result });
+                }
+            })
         });
     }
 
