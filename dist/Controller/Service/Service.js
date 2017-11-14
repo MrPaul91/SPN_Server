@@ -32,6 +32,10 @@ var _InsertImage = require('../Insert/InsertImage.js');
 
 var _InsertImage2 = _interopRequireDefault(_InsertImage);
 
+var _GetAlbums = require('../Query/GetAlbums.js');
+
+var _GetAlbums2 = _interopRequireDefault(_GetAlbums);
+
 var _ProfileImage = require('../Query/ProfileImage.js');
 
 var _ProfileImage2 = _interopRequireDefault(_ProfileImage);
@@ -68,6 +72,7 @@ var Service = function () {
             this.app.post('/LogIn', _LogIn2.default); //Bien
             this.app.post('/InsertUser', _InsertUser2.default); //Bien
             this.app.post('/InsertImage', _InsertImage2.default); //Bien
+            this.app.post('/GetAlbums', _GetAlbums2.default);
             this.app.get('/Image/Profile/:name', _ProfileImage2.default); //Bien
             this.app.get('/Image/Album/:name', _AlbumImage2.default); //Bien
 
