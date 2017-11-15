@@ -23,4 +23,18 @@ export default class Album {
 
     }
 
+    //Bien
+    static async getAlbumImages(albumId) {
+
+        var db = new DataBaseConnection();
+
+        try {
+            var result = await db.getAlbumImages(albumId);
+            return result;
+
+        } catch (error) {
+            return ({ 'error': error });
+        }
+    }
+
 }

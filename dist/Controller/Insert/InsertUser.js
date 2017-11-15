@@ -45,7 +45,7 @@ exports.default = function () {
                         avatar = req.body.avatar;
                         password = req.body.password;
                         email = req.body.email;
-                        newUser = new _User2.default(personId, name, username, avatar, password, email);
+                        newUser = new _User2.default(personId, name, username, avatar, password, email, 'REGULAR');
 
                         if (!(newUser.validatePerson() && newUser.validateUser())) {
                             _context.next = 15;

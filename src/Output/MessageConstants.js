@@ -8,5 +8,6 @@ export default {
     albumximage_created: new Output('albumximage_created', 200),
     logIn_successful: new Output('logIn_successful', 200),
     image_updated: new Output('image_updated', 200),
-    albums_queried: new Output('albums_queried', 200)
+    albums_queried: new Output('albums_queried', 200),
+    images_queried: new Output('images_queried', 200)
 }

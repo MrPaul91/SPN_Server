@@ -45,7 +45,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var User = function (_Person) {
     (0, _inherits3.default)(User, _Person);
 
-    function User(personId, name, username, avatar, password, email) {
+    function User(personId, name, username, avatar, password, email, rol) {
         (0, _classCallCheck3.default)(this, User);
 
         var _this = (0, _possibleConstructorReturn3.default)(this, (User.__proto__ || (0, _getPrototypeOf2.default)(User)).call(this, personId, name));
@@ -54,13 +54,20 @@ var User = function (_Person) {
         _this.avatar = avatar;
         _this.password = password;
         _this.email = email;
+        _this.rol = rol;
         return _this;
     }
+    /********** Bien */
+
 
     (0, _createClass3.default)(User, [{
         key: 'validateUser',
+
+
+        /********** Bien Fin */
+
         value: function validateUser() {
-            if (!this.username || !this.password || !this.avatar || !this.email) {
+            if (!this.username || !this.password || !this.avatar || !this.email || !this.rol) {
                 return false;
             } else if (!(this.username.length >= 5 && this.username.length <= 20 && this.password.length >= 5 && this.password.length <= 20 && this.email.length >= 5 && this.email.length <= 20)) {
                 return false;
@@ -68,6 +75,9 @@ var User = function (_Person) {
                 return true;
             }
         }
+
+        //Bien
+
     }, {
         key: 'insertUser',
         value: function () {
@@ -105,10 +115,16 @@ var User = function (_Person) {
 
             return insertUser;
         }()
+
+        //Bien
+
     }, {
         key: 'userToString',
+
+
+        //Bien
         value: function userToString() {
-            return { "person": this.personToString(), "username": this.username, "avatar": this.avatar, "email": this.email };
+            return { "person": this.personToString(), "username": this.username, "avatar": this.avatar, "email": this.email, "rol": this.rol };
         }
     }, {
         key: 'getUsername',
@@ -129,6 +145,11 @@ var User = function (_Person) {
         key: 'getEmail',
         get: function get() {
             return this.email;
+        }
+    }, {
+        key: 'getRol',
+        get: function get() {
+            return this.rol;
         }
     }, {
         key: 'getAlbumColletion',
@@ -154,6 +175,11 @@ var User = function (_Person) {
         key: 'setEmail',
         set: function set(email) {
             this.email = email;
+        }
+    }, {
+        key: 'setRol',
+        set: function set(rol) {
+            this.rol = rol;
         }
     }, {
         key: 'setAlbumCollection',

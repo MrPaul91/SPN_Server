@@ -5,6 +5,7 @@ import MessageConstants from '../Output/MessageConstants.js';
 
 export default class DataBaseConnection {
 
+    //Bien
     constructor() {
 
         this.connection = mysql.createConnection({
@@ -18,6 +19,7 @@ export default class DataBaseConnection {
         this.start();
     }
 
+    //Bien
     start() {
         this.connection.connect((error) => {
 
@@ -29,6 +31,7 @@ export default class DataBaseConnection {
         });
     }
 
+    //Bien
     async insertUser(user) {
 
         return new Promise((resolve, reject) => {
@@ -39,12 +42,15 @@ export default class DataBaseConnection {
                     this.connection.rollback(() => { reject(ErrorConstants.data_base_error); });
                 } else {
 
-                    this.connection.query("INSERT INTO person VALUES(" + user.personId + ",'" + user.name + "','USER')", (error, result) => {
+                    var q1 = "INSERT INTO person(personId, name, typeOfPerson) VALUES ('" + user.personId + "','" + user.name + "','USER')";
+                    this.connection.query(q1, (error, result) => {
 
                         if (error) {
                             this.connection.rollback(() => { reject(ErrorConstants.person_exists); });
                         } else {
-                            this.connection.query("INSERT INTO user VALUES('" + user.username + "','/Image/Profile/" + user.username + user.avatar.extension + "','" + user.password + "','" + user.email + "'," + user.personId + ")", (error, result) => {
+
+                            var q2 = "INSERT INTO user(username, avatar, password, email, rol, person) VALUES ('" + user.username + "','/Image/Profile/" + user.username + user.avatar.extension + "','" + user.password + "','" + user.email + "','" + user.rol + "', " + user.personId + ")";
+                            this.connection.query(q2, (error, result) => {
                                 if (error) {
                                     this.connection.rollback(() => { reject(ErrorConstants.user_exists); });
                                 } else {
@@ -77,6 +83,7 @@ export default class DataBaseConnection {
         });
     }
 
+    //Bien
     logIn(username, password) {
 
         return new Promise((resolve, reject) => {
@@ -101,6 +108,7 @@ export default class DataBaseConnection {
 
     }
 
+    //Bien
     getUser(username) {
 
         return new Promise((resolve, reject) => {
@@ -119,10 +127,11 @@ export default class DataBaseConnection {
         })
     }
 
+    //Bien
     createSession(session) {
         return new Promise((resolve, reject) => {
-
-            this.connection.query("INSERT INTO session VALUES('" + session.sessionId + "', '" + session.status + "', '" + session.IP + "', '" + session.user.personId + "')", (error, result, fields) => {
+            var q = "INSERT INTO session(sessionId, status, ip, user) VALUES ('" + session.sessionId + "','" + session.status + "','" + session.IP + "','" + session.user.personId + "')";
+            this.connection.query(q, (error, result, fields) => {
 
                 if (error) {
                     reject(ErrorConstants.session_exists);
@@ -133,6 +142,7 @@ export default class DataBaseConnection {
         });
     }
 
+    //Bien
     getSession(sessionId) {
         return new Promise((resolve, reject) => {
 
@@ -148,6 +158,7 @@ export default class DataBaseConnection {
         })
     }
 
+    //Bien
     insertImage(image) {
 
         return new Promise((resolve, reject) => {
@@ -186,6 +197,7 @@ export default class DataBaseConnection {
         });
     }
 
+    //Bien
     getAlbums(username) {
         return new Promise((resolve, reject) => {
 
@@ -199,6 +211,25 @@ export default class DataBaseConnection {
         });
     }
 
+    //Bien
+    getAlbumImages(albumId) {
+
+        return new Promise((resolve, reject) => {
+
+            //var q = "SELECT idImage, directory, extension, description, title, comment, user.username, orderNumber FROM user INNER JOIN (image INNER JOIN albumximage ON image.idImage = albumximage.image) ON image.user = user.person WHERE album = '" + albumId + "' ORDER BY albumximage.orderNumber ASC";
+            var q = "SELECT idImage, CONCAT(directory, idImage, extension) AS imagePath, description, title, comment, user.username, orderNumber FROM user INNER JOIN (image INNER JOIN albumximage ON image.idImage = albumximage.image) ON image.user = user.person WHERE album = '" + albumId + "' ORDER BY albumximage.orderNumber ASC"
+            this.connection.query(q, (error, result, fields) => {
+
+                if (error) {
+                    reject(ErrorConstants.data_base_error);
+                } else {
+                    resolve({ 'message': MessageConstants.images_queried, 'Images': result });
+                }
+            });
+        });
+    }
+
+    //Bien
     static insertFile(path, data, option) {
 
         return new Promise((resolve, reject) => {

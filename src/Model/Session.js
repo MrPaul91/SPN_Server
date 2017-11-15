@@ -14,63 +14,6 @@ export default class Session {
         this.user = user;
     }
 
-    static async loginSession(username, password, IP) {
-        var db = new DataBaseConnection();
-
-        try {
-            var result = await db.logIn(username, password);
-            var data = {
-                'username': result.username,
-                'password': result.password,
-                'IP': IP,
-                'date': new Date().toJSON()
-            };
-            var token = await Session.createToken(data);
-            var newUser = new User(result.personId, result.name, result.username, result.avatar, result.password, result.email);
-            var newSession = new Session(token, 'online', IP, newUser);
-
-            if (newSession.validateSession()) {
-                var message = await db.createSession(newSession);
-                return ({ 'session': newSession.sessionToString(), 'message': message });
-            }
-
-        } catch (error) {
-            return ({ 'error': error });
-        }
-    }
-
-    static async createToken(data) {
-
-        return new Promise((resolve, reject) => {
-            var cert = fs.readFileSync('private.key');
-            jwt.sign(data, cert, (error, token) => {
-
-                if (error) {
-                    console.log("aqui");
-                    reject(ErrorConstants.server_error);
-                } else {
-                    resolve(token);
-                }
-            })
-        });
-
-    }
-
-    static async search(sessionId) {
-        var db = new DataBaseConnection();
-        try {
-
-            var result = await db.getSession(sessionId);
-            var newUser = new User(result.personId, result.name, result.username, result.avatar, result.password, result.email);
-            var newSession = new Session(result.sessionId, result.status, result.ip, newUser);
-            return (newSession);
-        } catch (error) {
-            return ({ 'error': error });
-        }
-
-
-    }
-
     get getStatus() {
 
         return this.status;
@@ -97,6 +40,66 @@ export default class Session {
         this.IP = IP;
     }
 
+    //Bien
+    static async loginSession(username, password, IP) {
+        var db = new DataBaseConnection();
+
+        try {
+
+            var result = await db.logIn(username, password);
+            var data = {
+                'username': result.username,
+                'password': result.password,
+                'IP': IP,
+                'date': new Date().toJSON()
+            };
+            var token = await Session.createToken(data);
+            var newUser = new User(result.personId, result.name, result.username, result.avatar, result.password, result.email, result.rol);
+            var newSession = new Session(token, 'online', IP, newUser);
+
+            if (newSession.validateSession()) {
+                var message = await db.createSession(newSession);
+                return ({ 'session': newSession.sessionToString(), 'message': message });
+            }
+
+        } catch (error) {
+            return ({ 'error': error });
+        }
+    }
+
+    //Bien
+    static async createToken(data) {
+
+        return new Promise((resolve, reject) => {
+            var cert = fs.readFileSync('private.key');
+            jwt.sign(data, cert, (error, token) => {
+
+                if (error) {
+                    console.log("aqui");
+                    reject(ErrorConstants.server_error);
+                } else {
+                    resolve(token);
+                }
+            })
+        });
+
+    }
+
+    //Bien
+    static async search(sessionId) {
+        var db = new DataBaseConnection();
+        try {
+            var result = await db.getSession(sessionId);
+            var newUser = new User(result.personId, result.name, result.username, result.avatar, result.password, result.email, result.rol);
+            var newSession = new Session(result.sessionId, result.status, result.ip, newUser);
+            return (newSession);
+        } catch (error) {
+            return ({ 'error': error });
+        }
+
+
+    }
+
     validateSession() {
         if (!this.user.validateUser() || !this.user.validatePerson()) {
             return false;
@@ -109,7 +112,8 @@ export default class Session {
             return true;
         }
     }
-
+    
+    //Bien
     validateIP(IP, username) {
 
         if (this.status == 'online' && this.IP == IP && this.user.username == username) {

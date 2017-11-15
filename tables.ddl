@@ -1,13 +1,3 @@
-CREATE TABLE image(
-   idImage int  AUTO_INCREMENT PRIMARY KEY,
-   photo VARCHAR(80) NOT NULL,
-   description VARCHAR(255) NOT NULL,
-   title VARCHAR(20) NOT NULL,
-   comment VARCHAR(255),
-   user INT(10) NOT NULL,
-   FOREIGN KEY(user) REFERENCES user(person)
-);
-
 CREATE TABLE person(
     personId INT(10) PRIMARY KEY,
     name VARCHAR(40) NOT NULL,
@@ -19,6 +9,7 @@ CREATE TABLE user(
    avatar VARCHAR(80) NOT NULL,
    password VARCHAR(20) NOT NULL,
    email VARCHAR(20) NOT NULL,
+   rol VARCHAR(20) NOT NULL,
    person INT(10) PRIMARY KEY,
    FOREIGN KEY(person) REFERENCES person(personId),
    UNIQUE(username)
@@ -38,6 +29,17 @@ CREATE TABLE album(
     description VARCHAR(255) NOT NULL,
     user INT(10) NOT NULL,
     FOREIGN KEY(user) REFERENCES user(person)
+);
+
+CREATE TABLE image(
+   idImage int  AUTO_INCREMENT PRIMARY KEY,
+   directory VARCHAR(80) NOT NULL,
+   extension VARCHAR(80) NOT NULL,
+   description VARCHAR(255) NOT NULL,
+   title VARCHAR(20) NOT NULL,
+   comment VARCHAR(255),
+   user INT(10) NOT NULL,
+   FOREIGN KEY(user) REFERENCES user(person)
 );
 
 CREATE TABLE albumximage(

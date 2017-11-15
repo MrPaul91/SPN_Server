@@ -28,79 +28,71 @@ var _Session = require('../../Model/Session.js');
 
 var _Session2 = _interopRequireDefault(_Session);
 
-var _User = require('../../Model/User.js');
-
-var _User2 = _interopRequireDefault(_User);
-
 var _Album = require('../../Model/Album.js');
 
 var _Album2 = _interopRequireDefault(_Album);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+//Bien
 exports.default = function () {
     var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(req, res) {
-        var username, sessionId, IP, newSession, result;
+        var username, sessionId, albumId, IP, newSession, result;
         return _regenerator2.default.wrap(function _callee$(_context) {
             while (1) {
                 switch (_context.prev = _context.next) {
                     case 0:
                         username = req.body.username;
                         sessionId = req.body.sessionId;
+                        albumId = req.body.albumId;
                         IP = _requestIp2.default.getClientIp(req);
-                        _context.next = 5;
+                        _context.next = 6;
                         return _Session2.default.search(sessionId);
 
-                    case 5:
+                    case 6:
                         newSession = _context.sent;
 
-                        if (!(username && sessionId)) {
-                            _context.next = 21;
+                        if (!(username && sessionId && albumId)) {
+                            _context.next = 22;
                             break;
                         }
 
                         if (newSession.error) {
-                            _context.next = 18;
+                            _context.next = 19;
                             break;
                         }
 
                         if (!newSession.validateIP(IP, username)) {
-                            _context.next = 15;
+                            _context.next = 16;
                             break;
                         }
 
-                        _context.next = 11;
-                        return _Album2.default.getAlbums(username);
+                        _context.next = 12;
+                        return _Album2.default.getAlbumImages(albumId);
 
-                    case 11:
+                    case 12:
                         result = _context.sent;
 
+                        res.status(result.message.statusCode).send((0, _stringify2.default)({ "message": result.message.name, "Images": result.Images }));
 
-                        if (!result.error) {
-                            res.status(result.message.statusCode).send((0, _stringify2.default)({ "message": result.message.name, "Albums": result.Albums }));
-                        } else {
-                            res.status(result.error.statusCode).send((0, _stringify2.default)({ "error": result.error.name }));
-                        }
-
-                        _context.next = 16;
+                        _context.next = 17;
                         break;
-
-                    case 15:
-                        res.status(_ErrorConstants2.default.invalid_session.statusCode).send((0, _stringify2.default)({ "error": _ErrorConstants2.default.invalid_session.name }));
 
                     case 16:
-                        _context.next = 19;
+                        res.status(_ErrorConstants2.default.invalid_session.statusCode).send((0, _stringify2.default)({ "error": _ErrorConstants2.default.invalid_session.name }));
+
+                    case 17:
+                        _context.next = 20;
                         break;
 
-                    case 18:
+                    case 19:
                         res.status(newSession.error.statusCode).send((0, _stringify2.default)({ "error": newSession.error.name }));
 
-                    case 19:
+                    case 20:
                         _context.next = 23;
                         break;
 
-                    case 21:
-                        console.log("Entro6");
+                    case 22:
                         res.status(_ErrorConstants2.default.missing_information.statusCode).send((0, _stringify2.default)({ "error": _ErrorConstants2.default.missing_information.name }));
 
                     case 23:
@@ -114,4 +106,4 @@ exports.default = function () {
     return function (_x, _x2) {
         return _ref.apply(this, arguments);
     };
-}(); //Bien
+}();

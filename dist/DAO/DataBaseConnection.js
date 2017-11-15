@@ -43,6 +43,8 @@ var _MessageConstants2 = _interopRequireDefault(_MessageConstants);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var DataBaseConnection = function () {
+
+    //Bien
     function DataBaseConnection() {
         (0, _classCallCheck3.default)(this, DataBaseConnection);
 
@@ -58,6 +60,9 @@ var DataBaseConnection = function () {
         this.start();
     }
 
+    //Bien
+
+
     (0, _createClass3.default)(DataBaseConnection, [{
         key: 'start',
         value: function start() {
@@ -70,6 +75,9 @@ var DataBaseConnection = function () {
                 }
             });
         }
+
+        //Bien
+
     }, {
         key: 'insertUser',
         value: function () {
@@ -90,14 +98,17 @@ var DataBaseConnection = function () {
                                             });
                                         } else {
 
-                                            _this.connection.query("INSERT INTO person VALUES(" + user.personId + ",'" + user.name + "','USER')", function (error, result) {
+                                            var q1 = "INSERT INTO person(personId, name, typeOfPerson) VALUES ('" + user.personId + "','" + user.name + "','USER')";
+                                            _this.connection.query(q1, function (error, result) {
 
                                                 if (error) {
                                                     _this.connection.rollback(function () {
                                                         reject(_ErrorConstants2.default.person_exists);
                                                     });
                                                 } else {
-                                                    _this.connection.query("INSERT INTO user VALUES('" + user.username + "','/Image/Profile/" + user.username + user.avatar.extension + "','" + user.password + "','" + user.email + "'," + user.personId + ")", function (error, result) {
+
+                                                    var q2 = "INSERT INTO user(username, avatar, password, email, rol, person) VALUES ('" + user.username + "','/Image/Profile/" + user.username + user.avatar.extension + "','" + user.password + "','" + user.email + "','" + user.rol + "', " + user.personId + ")";
+                                                    _this.connection.query(q2, function (error, result) {
                                                         if (error) {
                                                             _this.connection.rollback(function () {
                                                                 reject(_ErrorConstants2.default.user_exists);
@@ -144,6 +155,9 @@ var DataBaseConnection = function () {
 
             return insertUser;
         }()
+
+        //Bien
+
     }, {
         key: 'logIn',
         value: function logIn(username, password) {
@@ -169,6 +183,9 @@ var DataBaseConnection = function () {
                 });
             });
         }
+
+        //Bien
+
     }, {
         key: 'getUser',
         value: function getUser(username) {
@@ -189,14 +206,17 @@ var DataBaseConnection = function () {
                 });
             });
         }
+
+        //Bien
+
     }, {
         key: 'createSession',
         value: function createSession(session) {
             var _this4 = this;
 
             return new _promise2.default(function (resolve, reject) {
-
-                _this4.connection.query("INSERT INTO session VALUES('" + session.sessionId + "', '" + session.status + "', '" + session.IP + "', '" + session.user.personId + "')", function (error, result, fields) {
+                var q = "INSERT INTO session(sessionId, status, ip, user) VALUES ('" + session.sessionId + "','" + session.status + "','" + session.IP + "','" + session.user.personId + "')";
+                _this4.connection.query(q, function (error, result, fields) {
 
                     if (error) {
                         reject(_ErrorConstants2.default.session_exists);
@@ -206,6 +226,9 @@ var DataBaseConnection = function () {
                 });
             });
         }
+
+        //Bien
+
     }, {
         key: 'getSession',
         value: function getSession(sessionId) {
@@ -224,6 +247,9 @@ var DataBaseConnection = function () {
                 });
             });
         }
+
+        //Bien
+
     }, {
         key: 'insertImage',
         value: function insertImage(image) {
@@ -269,6 +295,9 @@ var DataBaseConnection = function () {
                 });
             });
         }
+
+        //Bien
+
     }, {
         key: 'getAlbums',
         value: function getAlbums(username) {
@@ -285,6 +314,31 @@ var DataBaseConnection = function () {
                 });
             });
         }
+
+        //Bien
+
+    }, {
+        key: 'getAlbumImages',
+        value: function getAlbumImages(albumId) {
+            var _this8 = this;
+
+            return new _promise2.default(function (resolve, reject) {
+
+                //var q = "SELECT idImage, directory, extension, description, title, comment, user.username, orderNumber FROM user INNER JOIN (image INNER JOIN albumximage ON image.idImage = albumximage.image) ON image.user = user.person WHERE album = '" + albumId + "' ORDER BY albumximage.orderNumber ASC";
+                var q = "SELECT idImage, CONCAT(directory, idImage, extension) AS imagePath, description, title, comment, user.username, orderNumber FROM user INNER JOIN (image INNER JOIN albumximage ON image.idImage = albumximage.image) ON image.user = user.person WHERE album = '" + albumId + "' ORDER BY albumximage.orderNumber ASC";
+                _this8.connection.query(q, function (error, result, fields) {
+
+                    if (error) {
+                        reject(_ErrorConstants2.default.data_base_error);
+                    } else {
+                        resolve({ 'message': _MessageConstants2.default.images_queried, 'Images': result });
+                    }
+                });
+            });
+        }
+
+        //Bien
+
     }], [{
         key: 'insertFile',
         value: function insertFile(path, data, option) {

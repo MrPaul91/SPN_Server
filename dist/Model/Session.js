@@ -73,6 +73,9 @@ var Session = function () {
                 return true;
             }
         }
+
+        //Bien
+
     }, {
         key: 'validateIP',
         value: function validateIP(IP, username) {
@@ -120,6 +123,9 @@ var Session = function () {
         set: function set(IP) {
             this.IP = IP;
         }
+
+        //Bien
+
     }], [{
         key: 'loginSession',
         value: function () {
@@ -147,7 +153,7 @@ var Session = function () {
 
                             case 8:
                                 token = _context.sent;
-                                newUser = new _User2.default(result.personId, result.name, result.username, result.avatar, result.password, result.email);
+                                newUser = new _User2.default(result.personId, result.name, result.username, result.avatar, result.password, result.email, result.rol);
                                 newSession = new Session(token, 'online', IP, newUser);
 
                                 if (!newSession.validateSession()) {
@@ -185,6 +191,9 @@ var Session = function () {
 
             return loginSession;
         }()
+
+        //Bien
+
     }, {
         key: 'createToken',
         value: function () {
@@ -220,6 +229,9 @@ var Session = function () {
 
             return createToken;
         }()
+
+        //Bien
+
     }, {
         key: 'search',
         value: function () {
@@ -236,7 +248,7 @@ var Session = function () {
 
                             case 4:
                                 result = _context3.sent;
-                                newUser = new _User2.default(result.personId, result.name, result.username, result.avatar, result.password, result.email);
+                                newUser = new _User2.default(result.personId, result.name, result.username, result.avatar, result.password, result.email, result.rol);
                                 newSession = new Session(result.sessionId, result.status, result.ip, newUser);
                                 return _context3.abrupt('return', newSession);
 

@@ -4,6 +4,7 @@ import LogIn from '../Query/LogIn.js';
 import InsertUser from '../Insert/InsertUser.js';
 import InsertImage from '../Insert/InsertImage.js';
 import GetAlbums from '../Query/GetAlbums.js';
+import GetImagesOfAnAlbum from '../Query/GetImagesOfAnAlbum.js';
 import ProfileImage from '../Query/ProfileImage.js'
 import AlbumImage from '../Query/AlbumImage.js'
 import cookieParser from 'cookie-parser';
@@ -16,7 +17,7 @@ export default class Service {
 
     start() {
 
-        this.app.use(bodyParser.json({limit: '50mb'}));
+        this.app.use(bodyParser.json({ limit: '50mb' }));
         this.app.use(cookieParser());
         this.app.use(function (req, res, next) {
             res.header("Access-Control-Allow-Origin", "*");
@@ -27,7 +28,10 @@ export default class Service {
         this.app.post('/LogIn', LogIn); //Bien
         this.app.post('/InsertUser', InsertUser); //Bien
         this.app.post('/InsertImage', InsertImage); //Bien
-        this.app.post('/GetAlbums', GetAlbums);
+        this.app.post('/GetAlbums', GetAlbums); //Bien
+
+        this.app.post('/GetImagesOfAnAlbum', GetImagesOfAnAlbum); //Bien
+
         this.app.get('/Image/Profile/:name', ProfileImage);//Bien
         this.app.get('/Image/Album/:name', AlbumImage);//Bien
 

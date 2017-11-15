@@ -12,7 +12,7 @@ export default async function (req, res) {
     var password = req.body.password;
     var email = req.body.email;
 
-    var newUser = new User(personId, name, username, avatar, password, email);
+    var newUser = new User(personId, name, username, avatar, password, email, 'REGULAR');
 
     if (newUser.validatePerson() && newUser.validateUser()) {
 

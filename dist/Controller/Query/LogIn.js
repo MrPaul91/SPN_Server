@@ -54,7 +54,7 @@ exports.default = function () {
 
 
                         if (!result.error) {
-                            res.cookie('sessionId', result.session.sessionId).status(result.message.statusCode).send((0, _stringify2.default)({ "message": result.message.name, "user": result.session.user }));
+                            res.status(result.message.statusCode).send((0, _stringify2.default)({ "message": result.message.name, "user": result.session.user, "sessionId": result.session.sessionId }));
                         } else {
                             res.status(result.error.statusCode).send((0, _stringify2.default)({ "error": result.error.name }));
                         }
@@ -75,4 +75,4 @@ exports.default = function () {
     return function (_x, _x2) {
         return _ref.apply(this, arguments);
     };
-}();
+}(); //Bien

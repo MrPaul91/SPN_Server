@@ -1,3 +1,4 @@
+//Bien
 import requestIp from 'request-ip';
 import ErrorConstants from '../../Output/ErrorConstants.js';
 import Session from '../../Model/Session.js';
@@ -12,7 +13,7 @@ export default async function (req, res) {
         var result = await Session.loginSession(username, password, IP);
 
         if (!result.error) {
-            res.cookie('sessionId', result.session.sessionId).status(result.message.statusCode).send(JSON.stringify({ "message": result.message.name, "user": result.session.user }));
+            res.status(result.message.statusCode).send(JSON.stringify({ "message": result.message.name, "user": result.session.user, "sessionId": result.session.sessionId }));
         } else {
             res.status(result.error.statusCode).send(JSON.stringify({ "error": result.error.name }));
         }

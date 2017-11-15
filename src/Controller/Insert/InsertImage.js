@@ -12,6 +12,7 @@ export default async function (req, res) {
     var comment = req.body.comment;
     var username = req.body.username;
     var sessionId = req.body.sessionId;
+    var albumId = req.body.albumId;
     var IP = requestIp.getClientIp(req);
 
     var newSession = await Session.search(sessionId);
