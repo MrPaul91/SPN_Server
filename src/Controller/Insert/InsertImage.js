@@ -17,7 +17,7 @@ export default async function (req, res) {
 
     var newSession = await Session.search(sessionId);
 
-    if (photo && description && title && comment && username && sessionId && IP) {
+    if (photo && description && title && comment && username && sessionId && albumId && IP) {
 
         if (!newSession.error) {
             if (newSession.validateIP(IP, username)) {

@@ -91,13 +91,13 @@ export default class User extends Person {
 
         try {
             var result = await db.getUser(username);
-            return (new User(result.personId, result.name, result.username, result.avatar, result.password, result.email));
+            return (new User(result.personId, result.name, result.username, result.avatar, result.password, result.email, result.rol));
         } catch (error) {
 
             return ({ 'error': error });
         }
     }
-    
+
     //Bien
     userToString() {
         return ({ "person": this.personToString(), "username": this.username, "avatar": this.avatar, "email": this.email, "rol": this.rol });

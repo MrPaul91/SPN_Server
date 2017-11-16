@@ -59,7 +59,7 @@ exports.default = function () {
                     case 10:
                         newSession = _context.sent;
 
-                        if (!(photo && description && title && comment && username && sessionId && IP)) {
+                        if (!(photo && description && title && comment && username && sessionId && albumId && IP)) {
                             _context.next = 33;
                             break;
                         }

@@ -17,6 +17,8 @@ export default class Image {
         var db = new DataBaseConnection();
         var newImage = new Image(photo, description, title, comment, user);
 
+        console.log(newImage);
+
         if (newImage.validateImage()) {
 
             try {
@@ -89,7 +91,6 @@ export default class Image {
         if (!this.user.validateUser()) {
             return false;
         } else if (!this.photo || !this.description || !this.title || !this.comment) {
-
             return false;
         } else if (!((this.title.length >= 5 && this.title.length <= 20) && (this.comment.length > 0 && this.comment.length <= 255) && (this.description.length > 0 && this.description.length <= 255))) {
             return false;

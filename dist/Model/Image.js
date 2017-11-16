@@ -53,13 +53,16 @@ var Image = function () {
         value: function validateImage() {
 
             if (!this.user.validateUser()) {
+                console.log("aqui1");
                 return false;
             } else if (!this.photo || !this.description || !this.title || !this.comment) {
-
+                console.log("aqui2");
                 return false;
             } else if (!(this.title.length >= 5 && this.title.length <= 20 && this.comment.length > 0 && this.comment.length <= 255 && this.description.length > 0 && this.description.length <= 255)) {
+                console.log("aqui3");
                 return false;
             } else {
+                console.log("aqui4");
                 return true;
             }
         }
@@ -125,37 +128,40 @@ var Image = function () {
                                 db = new _DataBaseConnection2.default();
                                 newImage = new Image(photo, description, title, comment, user);
 
+
+                                console.log(newImage);
+
                                 if (!newImage.validateImage()) {
-                                    _context.next = 15;
+                                    _context.next = 16;
                                     break;
                                 }
 
-                                _context.prev = 3;
-                                _context.next = 6;
+                                _context.prev = 4;
+                                _context.next = 7;
                                 return db.insertImage(newImage);
 
-                            case 6:
+                            case 7:
                                 message = _context.sent;
                                 return _context.abrupt('return', { 'message': message });
 
-                            case 10:
-                                _context.prev = 10;
-                                _context.t0 = _context['catch'](3);
+                            case 11:
+                                _context.prev = 11;
+                                _context.t0 = _context['catch'](4);
                                 return _context.abrupt('return', { 'error': _context.t0 });
 
-                            case 13:
-                                _context.next = 16;
+                            case 14:
+                                _context.next = 17;
                                 break;
 
-                            case 15:
+                            case 16:
                                 return _context.abrupt('return', { 'error': _ErrorConstants2.default.invalid_image_information });
 
-                            case 16:
+                            case 17:
                             case 'end':
                                 return _context.stop();
                         }
                     }
-                }, _callee, this, [[3, 10]]);
+                }, _callee, this, [[4, 11]]);
             }));
 
             function create(_x, _x2, _x3, _x4, _x5) {

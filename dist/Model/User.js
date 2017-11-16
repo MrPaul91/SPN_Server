@@ -202,7 +202,7 @@ var User = function (_Person) {
 
                             case 4:
                                 result = _context2.sent;
-                                return _context2.abrupt('return', new User(result.personId, result.name, result.username, result.avatar, result.password, result.email));
+                                return _context2.abrupt('return', new User(result.personId, result.name, result.username, result.avatar, result.password, result.email, result.rol));
 
                             case 8:
                                 _context2.prev = 8;
