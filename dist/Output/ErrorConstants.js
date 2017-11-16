@@ -23,8 +23,8 @@ exports.default = {
     session_exists: new _Output2.default("session_exists", 400),
     session_does_not_exists: new _Output2.default("session_does_not_exists", 400),
     invalid_session: new _Output2.default("invalid_session", 401),
-    invalid_image_information: new _Output2.default("invalid_image_information", 400)
-
+    invalid_image_information: new _Output2.default("invalid_image_information", 400),
+    user_not_authorized: new _Output2.default("user_not_authorized", 401)
     /*
     
     password_incorrect: new Error("password_incorrect", 400),

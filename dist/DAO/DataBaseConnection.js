@@ -297,24 +297,42 @@ var DataBaseConnection = function () {
             });
         }
     }, {
-        key: 'insertAlbumxImage',
-        value: function insertAlbumxImage(image, album) {
+        key: 'insertAlbum',
+        value: function insertAlbum(album) {
             var _this7 = this;
 
             return new _promise2.default(function (resolve, reject) {
-                _this7.connection.beginTransaction(function (error) {
+
+                var query = "INSERT INTO album(name, description, user) VALUES ('" + album.name + "','" + album.description + "','" + album.user.personId + "')";
+                _this7.connection.query(query, function (error, result) {
 
                     if (error) {
-                        _this7.connection.rollback(function () {
+                        reject(_ErrorConstants2.default.data_base_error);
+                    } else {
+                        resolve({ "message": _MessageConstants2.default.album_created, "albumId": result.insertId });
+                    }
+                });
+            });
+        }
+    }, {
+        key: 'insertAlbumxImage',
+        value: function insertAlbumxImage(image, album) {
+            var _this8 = this;
+
+            return new _promise2.default(function (resolve, reject) {
+                _this8.connection.beginTransaction(function (error) {
+
+                    if (error) {
+                        _this8.connection.rollback(function () {
                             reject(_ErrorConstants2.default.data_base_error);
                         });
                     } else {
 
                         var query = "SELECT MAX(orderNumber) AS orderNumber FROM albumximage WHERE album='" + album + "'";
-                        _this7.connection.query(query, function (error, result, fields) {
+                        _this8.connection.query(query, function (error, result, fields) {
 
                             if (error || result.length == 0) {
-                                _this7.connection.rollback(function () {
+                                _this8.connection.rollback(function () {
                                     reject(_ErrorConstants2.default.data_base_error);
                                 });
                             } else {
@@ -322,20 +340,20 @@ var DataBaseConnection = function () {
                                 var orderNumber = result[0].orderNumber + 1;
 
                                 var query = "INSERT INTO albumximage(orderNumber, image, album) VALUES ('" + orderNumber + "','" + image + "','" + album + "')";
-                                _this7.connection.query(query, function (error, result) {
+                                _this8.connection.query(query, function (error, result) {
 
                                     if (error) {
-                                        _this7.connection.rollback(function () {
+                                        _this8.connection.rollback(function () {
                                             reject(_ErrorConstants2.default.data_base_error);
                                         });
                                     } else {
-                                        _this7.connection.commit(function (error) {
+                                        _this8.connection.commit(function (error) {
                                             if (error) {
-                                                _this7.connection.rollback(function () {
+                                                _this8.connection.rollback(function () {
                                                     reject(_ErrorConstants2.default.data_base_error);
                                                 });
                                             } else {
-                                                _this7.connection.end();
+                                                _this8.connection.end();
                                                 resolve({ "message": _MessageConstants2.default.albumximage_created });
                                             }
                                         });
@@ -353,11 +371,11 @@ var DataBaseConnection = function () {
     }, {
         key: 'getAlbums',
         value: function getAlbums(username) {
-            var _this8 = this;
+            var _this9 = this;
 
             return new _promise2.default(function (resolve, reject) {
 
-                _this8.connection.query("SELECT albumId, name, description FROM album WHERE album.user = (SELECT user.person FROM user WHERE user.username = '" + username + "')", function (error, result, fields) {
+                _this9.connection.query("SELECT albumId, name, description FROM album WHERE album.user = (SELECT user.person FROM user WHERE user.username = '" + username + "')", function (error, result, fields) {
                     if (error) {
                         reject(_ErrorConstants2.default.data_base_error);
                     } else {
@@ -372,13 +390,13 @@ var DataBaseConnection = function () {
     }, {
         key: 'getAlbumImages',
         value: function getAlbumImages(albumId) {
-            var _this9 = this;
+            var _this10 = this;
 
             return new _promise2.default(function (resolve, reject) {
 
                 //var q = "SELECT idImage, directory, extension, description, title, comment, user.username, orderNumber FROM user INNER JOIN (image INNER JOIN albumximage ON image.idImage = albumximage.image) ON image.user = user.person WHERE album = '" + albumId + "' ORDER BY albumximage.orderNumber ASC";
                 var q = "SELECT idImage, CONCAT(directory, idImage, extension) AS imagePath, description, title, comment, user.username, orderNumber FROM user INNER JOIN (image INNER JOIN albumximage ON image.idImage = albumximage.image) ON image.user = user.person WHERE album = '" + albumId + "' ORDER BY albumximage.orderNumber ASC";
-                _this9.connection.query(q, function (error, result, fields) {
+                _this10.connection.query(q, function (error, result, fields) {
 
                     if (error) {
                         reject(_ErrorConstants2.default.data_base_error);

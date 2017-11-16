@@ -198,6 +198,22 @@ export default class DataBaseConnection {
         });
     }
 
+    insertAlbum(album) {
+
+        return new Promise((resolve, reject) => {
+
+            var query = "INSERT INTO album(name, description, user) VALUES ('" + album.name + "','" + album.description + "','" + album.user.personId + "')";
+            this.connection.query(query, (error, result) => {
+
+                if (error) {
+                    reject(ErrorConstants.data_base_error);
+                } else {
+                    resolve({ "message": MessageConstants.album_created, "albumId": result.insertId })
+                }
+            });
+        });
+    }
+
     insertAlbumxImage(image, album) {
 
         return new Promise((resolve, reject) => {

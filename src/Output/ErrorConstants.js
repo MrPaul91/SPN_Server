@@ -14,7 +14,7 @@ export default {
     session_does_not_exists: new Output("session_does_not_exists", 400),
     invalid_session: new Output("invalid_session", 401),
     invalid_image_information: new Output("invalid_image_information", 400),
-    
+    user_not_authorized : new Output("user_not_authorized", 401),
     /*
     
     password_incorrect: new Error("password_incorrect", 400),

@@ -7,23 +7,32 @@ import Album from '../../Model/Album.js';
 
 export default async function (req, res) {
 
-    var username = req.body.username;
+    var username = req.body.username; //Session Owner
     var sessionId = req.body.sessionId;
+    var usernameToFind = req.body.usernameToFind;
     var IP = requestIp.getClientIp(req);
 
     var newSession = await Session.search(sessionId);
 
-    if (username && sessionId) {
+    if (username && sessionId && usernameToFind) {
 
         if (!newSession.error) {
 
             if (newSession.validateIP(IP, username)) {
-                var result = await Album.getAlbums(username);
 
-                if (!result.error) {
-                    res.status(result.message.statusCode).send(JSON.stringify({ "message": result.message.name, "Albums": result.Albums }));
+                var user = await User.getUser(username);
+
+                if (user.rol != 'REGULAR') {
+
+                    var result = await Album.getAlbums(usernameToFind);
+
+                    if (!result.error) {
+                        res.status(result.message.statusCode).send(JSON.stringify({ "message": result.message.name, "Albums": result.Albums }));
+                    } else {
+                        res.status(result.error.statusCode).send(JSON.stringify({ "error": result.error.name }));
+                    }
                 } else {
-                    res.status(result.error.statusCode).send(JSON.stringify({ "error": result.error.name }));
+                    res.status(ErrorConstants.user_not_authorized.statusCode).send(JSON.stringify({ "error": ErrorConstants.user_not_authorized.name }));
                 }
 
             } else {
