@@ -281,7 +281,8 @@ var DataBaseConnection = function () {
                                             });
                                         } else {
                                             _this6.connection.end();
-                                            resolve(_MessageConstants2.default.image_created);
+
+                                            resolve({ "message": _MessageConstants2.default.image_created, "idImage": result.insertId });
                                         }
                                     });
                                 }).catch(function (error) {
@@ -295,17 +296,68 @@ var DataBaseConnection = function () {
                 });
             });
         }
+    }, {
+        key: 'insertAlbumxImage',
+        value: function insertAlbumxImage(image, album) {
+            var _this7 = this;
+
+            return new _promise2.default(function (resolve, reject) {
+                _this7.connection.beginTransaction(function (error) {
+
+                    if (error) {
+                        _this7.connection.rollback(function () {
+                            reject(_ErrorConstants2.default.data_base_error);
+                        });
+                    } else {
+
+                        var query = "SELECT MAX(orderNumber) AS orderNumber FROM albumximage WHERE album='" + album + "'";
+                        _this7.connection.query(query, function (error, result, fields) {
+
+                            if (error || result.length == 0) {
+                                _this7.connection.rollback(function () {
+                                    reject(_ErrorConstants2.default.data_base_error);
+                                });
+                            } else {
+
+                                var orderNumber = result[0].orderNumber + 1;
+
+                                var query = "INSERT INTO albumximage(orderNumber, image, album) VALUES ('" + orderNumber + "','" + image + "','" + album + "')";
+                                _this7.connection.query(query, function (error, result) {
+
+                                    if (error) {
+                                        _this7.connection.rollback(function () {
+                                            reject(_ErrorConstants2.default.data_base_error);
+                                        });
+                                    } else {
+                                        _this7.connection.commit(function (error) {
+                                            if (error) {
+                                                _this7.connection.rollback(function () {
+                                                    reject(_ErrorConstants2.default.data_base_error);
+                                                });
+                                            } else {
+                                                _this7.connection.end();
+                                                resolve({ "message": _MessageConstants2.default.albumximage_created });
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            });
+        }
 
         //Bien
 
     }, {
         key: 'getAlbums',
         value: function getAlbums(username) {
-            var _this7 = this;
+            var _this8 = this;
 
             return new _promise2.default(function (resolve, reject) {
 
-                _this7.connection.query("SELECT albumId, name, description FROM album WHERE album.user = (SELECT user.person FROM user WHERE user.username = '" + username + "')", function (error, result, fields) {
+                _this8.connection.query("SELECT albumId, name, description FROM album WHERE album.user = (SELECT user.person FROM user WHERE user.username = '" + username + "')", function (error, result, fields) {
                     if (error) {
                         reject(_ErrorConstants2.default.data_base_error);
                     } else {
@@ -320,13 +372,13 @@ var DataBaseConnection = function () {
     }, {
         key: 'getAlbumImages',
         value: function getAlbumImages(albumId) {
-            var _this8 = this;
+            var _this9 = this;
 
             return new _promise2.default(function (resolve, reject) {
 
                 //var q = "SELECT idImage, directory, extension, description, title, comment, user.username, orderNumber FROM user INNER JOIN (image INNER JOIN albumximage ON image.idImage = albumximage.image) ON image.user = user.person WHERE album = '" + albumId + "' ORDER BY albumximage.orderNumber ASC";
                 var q = "SELECT idImage, CONCAT(directory, idImage, extension) AS imagePath, description, title, comment, user.username, orderNumber FROM user INNER JOIN (image INNER JOIN albumximage ON image.idImage = albumximage.image) ON image.user = user.person WHERE album = '" + albumId + "' ORDER BY albumximage.orderNumber ASC";
-                _this8.connection.query(q, function (error, result, fields) {
+                _this9.connection.query(q, function (error, result, fields) {
 
                     if (error) {
                         reject(_ErrorConstants2.default.data_base_error);

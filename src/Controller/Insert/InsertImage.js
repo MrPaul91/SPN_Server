@@ -3,6 +3,7 @@ import ErrorConstants from '../../Output/ErrorConstants.js';
 import Session from '../../Model/Session.js';
 import User from '../../Model/User.js';
 import Image from '../../Model/Image.js';
+import AlbumxImage from '../../Model/AlbumxImage.js';
 
 export default async function (req, res) {
 
@@ -29,7 +30,16 @@ export default async function (req, res) {
                     var result = await Image.create(photo, description, title, comment, imageOwner);
 
                     if (!result.error) {
-                        res.status(result.message.statusCode).send(JSON.stringify({ "message": result.message.name }));
+
+                        var idImage = result.idImage;
+                        var result = await AlbumxImage.create(idImage, albumId);
+
+                        if (!result.error) {
+                            res.status(result.message.statusCode).send(JSON.stringify({ "message": result.message.name }));
+                        } else {
+                            res.status(result.error.statusCode).send(JSON.stringify({ "error": result.error.name }));
+                        }
+
                     } else {
                         res.status(result.error.statusCode).send(JSON.stringify({ "error": result.error.name }));
                     }
@@ -47,4 +57,5 @@ export default async function (req, res) {
     } else {
         res.status(ErrorConstants.missing_information.statusCode).send(JSON.stringify({ "error": ErrorConstants.missing_information.name }));
     }
+
 }

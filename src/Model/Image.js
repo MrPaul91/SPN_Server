@@ -22,8 +22,8 @@ export default class Image {
         if (newImage.validateImage()) {
 
             try {
-                var message = await db.insertImage(newImage);
-                return ({ 'message': message });
+                var result = await db.insertImage(newImage);
+                return (result);
 
             } catch (error) {
                 return ({ 'error': error });

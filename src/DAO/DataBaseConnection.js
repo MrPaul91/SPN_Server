@@ -182,7 +182,8 @@ export default class DataBaseConnection {
                                             this.connection.rollback(() => { reject(ErrorConstants.data_base_error); });
                                         } else {
                                             this.connection.end();
-                                            resolve(MessageConstants.image_created);
+
+                                            resolve({ "message": MessageConstants.image_created, "idImage": result.insertId });
                                         }
                                     });
                                 })
@@ -193,6 +194,47 @@ export default class DataBaseConnection {
                     });
                 }
 
+            });
+        });
+    }
+
+    insertAlbumxImage(image, album) {
+
+        return new Promise((resolve, reject) => {
+            this.connection.beginTransaction((error) => {
+
+                if (error) {
+                    this.connection.rollback(() => { reject(ErrorConstants.data_base_error); });
+                } else {
+
+                    var query = "SELECT MAX(orderNumber) AS orderNumber FROM albumximage WHERE album='" + album + "'";
+                    this.connection.query(query, (error, result, fields) => {
+
+                        if (error || result.length == 0) {
+                            this.connection.rollback(() => { reject(ErrorConstants.data_base_error); });
+                        } else {
+
+                            var orderNumber = result[0].orderNumber + 1;
+
+                            var query = "INSERT INTO albumximage(orderNumber, image, album) VALUES ('" + orderNumber + "','" + image + "','" + album + "')";
+                            this.connection.query(query, (error, result) => {
+
+                                if (error) {
+                                    this.connection.rollback(() => { reject(ErrorConstants.data_base_error); });
+                                } else {
+                                    this.connection.commit((error) => {
+                                        if (error) {
+                                            this.connection.rollback(() => { reject(ErrorConstants.data_base_error); });
+                                        } else {
+                                            this.connection.end();
+                                            resolve({ "message": MessageConstants.albumximage_created });
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    });
+                }
             });
         });
     }

@@ -53,16 +53,12 @@ var Image = function () {
         value: function validateImage() {
 
             if (!this.user.validateUser()) {
-                console.log("aqui1");
                 return false;
             } else if (!this.photo || !this.description || !this.title || !this.comment) {
-                console.log("aqui2");
                 return false;
             } else if (!(this.title.length >= 5 && this.title.length <= 20 && this.comment.length > 0 && this.comment.length <= 255 && this.description.length > 0 && this.description.length <= 255)) {
-                console.log("aqui3");
                 return false;
             } else {
-                console.log("aqui4");
                 return true;
             }
         }
@@ -120,7 +116,7 @@ var Image = function () {
         key: 'create',
         value: function () {
             var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(photo, description, title, comment, user) {
-                var db, newImage, message;
+                var db, newImage, result;
                 return _regenerator2.default.wrap(function _callee$(_context) {
                     while (1) {
                         switch (_context.prev = _context.next) {
@@ -141,8 +137,8 @@ var Image = function () {
                                 return db.insertImage(newImage);
 
                             case 7:
-                                message = _context.sent;
-                                return _context.abrupt('return', { 'message': message });
+                                result = _context.sent;
+                                return _context.abrupt('return', result);
 
                             case 11:
                                 _context.prev = 11;
