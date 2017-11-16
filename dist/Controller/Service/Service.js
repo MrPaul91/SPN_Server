@@ -16,6 +16,10 @@ var _express = require('express');
 
 var _express2 = _interopRequireDefault(_express);
 
+var _injection = require('./injection.js');
+
+var _injection2 = _interopRequireDefault(_injection);
+
 var _bodyParser = require('body-parser');
 
 var _bodyParser2 = _interopRequireDefault(_bodyParser);
@@ -35,6 +39,10 @@ var _InsertImage2 = _interopRequireDefault(_InsertImage);
 var _InsertAlbum = require('../Insert/InsertAlbum.js');
 
 var _InsertAlbum2 = _interopRequireDefault(_InsertAlbum);
+
+var _CopyImage = require('../Insert/CopyImage.js');
+
+var _CopyImage2 = _interopRequireDefault(_CopyImage);
 
 var _GetAlbums = require('../Query/GetAlbums.js');
 
@@ -73,7 +81,9 @@ var Service = function () {
         key: 'start',
         value: function start() {
 
+            //this.app.use(sqlinjection);
             this.app.use(_bodyParser2.default.json({ limit: '50mb' }));
+            this.app.use(_injection2.default);
             this.app.use((0, _cookieParser2.default)());
             this.app.use(function (req, res, next) {
                 res.header("Access-Control-Allow-Origin", "*");
@@ -88,7 +98,7 @@ var Service = function () {
             this.app.post('/GetAlbums', _GetAlbums2.default); //Bien
 
             this.app.post('/GetAlbumsOfOtherUser', _GetAlbumsOfOtherUser2.default);
-
+            this.app.post('/CopyImage', _CopyImage2.default);
             this.app.post('/GetImagesOfAnAlbum', _GetImagesOfAnAlbum2.default); //Bien
             this.app.get('/Image/Profile/:name', _ProfileImage2.default); //Bien
             this.app.get('/Image/Album/:name', _AlbumImage2.default); //Bien

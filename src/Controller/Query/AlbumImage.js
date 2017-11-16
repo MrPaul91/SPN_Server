@@ -3,7 +3,6 @@ import fs from 'fs';
 
 export default async function (req, res) {
 
-    console.log(req.params.name);
     var file = path.resolve('Image/Album/' + req.params.name);
     await fs.exists(file, (exists) => {
 

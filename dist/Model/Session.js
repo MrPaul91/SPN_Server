@@ -207,7 +207,6 @@ var Session = function () {
                                     _jsonwebtoken2.default.sign(data, cert, function (error, token) {
 
                                         if (error) {
-                                            console.log("aqui");
                                             reject(_ErrorConstants2.default.server_error);
                                         } else {
                                             resolve(token);

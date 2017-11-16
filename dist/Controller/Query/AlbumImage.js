@@ -29,10 +29,8 @@ exports.default = function () {
             while (1) {
                 switch (_context.prev = _context.next) {
                     case 0:
-
-                        console.log(req.params.name);
                         file = _path2.default.resolve('Image/Album/' + req.params.name);
-                        _context.next = 4;
+                        _context.next = 3;
                         return _fs2.default.exists(file, function (exists) {
 
                             if (exists) {
@@ -42,7 +40,7 @@ exports.default = function () {
                             }
                         });
 
-                    case 4:
+                    case 3:
                     case 'end':
                         return _context.stop();
                 }

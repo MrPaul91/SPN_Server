@@ -365,6 +365,9 @@ var DataBaseConnection = function () {
                 });
             });
         }
+    }, {
+        key: 'copyImage',
+        value: function copyImage(idImage, albumId, user) {}
 
         //Bien
 

@@ -75,7 +75,6 @@ export default class Session {
             jwt.sign(data, cert, (error, token) => {
 
                 if (error) {
-                    console.log("aqui");
                     reject(ErrorConstants.server_error);
                 } else {
                     resolve(token);

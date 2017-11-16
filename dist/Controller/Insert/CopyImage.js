@@ -36,58 +36,54 @@ var _Album = require('../../Model/Album.js');
 
 var _Album2 = _interopRequireDefault(_Album);
 
+var _AlbumxImage = require('../../Model/AlbumxImage.js');
+
+var _AlbumxImage2 = _interopRequireDefault(_AlbumxImage);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = function () {
     var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(req, res) {
-        var name, description, username, sessionId, IP, newSession, albumOwner, newAlbum, result;
+        var username, sessionId, albumId, idImage, IP, newSession, result;
         return _regenerator2.default.wrap(function _callee$(_context) {
             while (1) {
                 switch (_context.prev = _context.next) {
                     case 0:
-                        name = req.body.name;
-                        description = req.body.description;
                         username = req.body.username; //Session Owner
 
                         sessionId = req.body.sessionId;
+                        albumId = req.body.albumId;
+                        idImage = req.body.idImage;
                         IP = _requestIp2.default.getClientIp(req);
-                        _context.next = 7;
+
+
+                        console.log(req.body);
+
+                        _context.next = 8;
                         return _Session2.default.search(sessionId);
 
-                    case 7:
+                    case 8:
                         newSession = _context.sent;
 
-                        if (!(name && description && username && sessionId)) {
-                            _context.next = 31;
+                        if (!(username && sessionId && albumId && idImage)) {
+                            _context.next = 24;
                             break;
                         }
 
                         if (newSession.error) {
-                            _context.next = 28;
+                            _context.next = 21;
                             break;
                         }
 
                         if (!newSession.validateIP(IP, username)) {
-                            _context.next = 25;
+                            _context.next = 18;
                             break;
                         }
 
-                        _context.next = 13;
-                        return _User2.default.getUser(username);
+                        _context.next = 14;
+                        return _AlbumxImage2.default.create(idImage, albumId);
 
-                    case 13:
-                        albumOwner = _context.sent;
-
-                        if (albumOwner.error) {
-                            _context.next = 22;
-                            break;
-                        }
-
-                        newAlbum = new _Album2.default(name, description, albumOwner);
-                        _context.next = 18;
-                        return newAlbum.create();
-
-                    case 18:
+                    case 14:
                         result = _context.sent;
 
 
@@ -96,34 +92,28 @@ exports.default = function () {
                         } else {
                             res.status(result.error.statusCode).send((0, _stringify2.default)({ "error": result.error.name }));
                         }
-                        _context.next = 23;
+
+                        _context.next = 19;
                         break;
 
-                    case 22:
-                        res.status(albumOwner.error.statusCode).send((0, _stringify2.default)({ "error": albumOwner.error.name }));
-
-                    case 23:
-                        _context.next = 26;
-                        break;
-
-                    case 25:
+                    case 18:
                         res.status(_ErrorConstants2.default.invalid_session.statusCode).send((0, _stringify2.default)({ "error": _ErrorConstants2.default.invalid_session.name }));
 
-                    case 26:
-                        _context.next = 29;
+                    case 19:
+                        _context.next = 22;
                         break;
 
-                    case 28:
+                    case 21:
                         res.status(newSession.error.statusCode).send((0, _stringify2.default)({ "error": newSession.error.name }));
 
-                    case 29:
-                        _context.next = 32;
+                    case 22:
+                        _context.next = 25;
                         break;
 
-                    case 31:
+                    case 24:
                         res.status(_ErrorConstants2.default.missing_information.statusCode).send((0, _stringify2.default)({ "error": _ErrorConstants2.default.missing_information.name }));
 
-                    case 32:
+                    case 25:
                     case 'end':
                         return _context.stop();
                 }

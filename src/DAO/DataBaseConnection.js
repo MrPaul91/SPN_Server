@@ -255,6 +255,10 @@ export default class DataBaseConnection {
         });
     }
 
+    copyImage(idImage, albumId, user) {
+
+    }
+
     //Bien
     getAlbums(username) {
         return new Promise((resolve, reject) => {

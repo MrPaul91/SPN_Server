@@ -4,7 +4,6 @@ import ErrorConstants from '../../Output/ErrorConstants.js';
 
 export default async function (req, res) {
 
-    console.log(req.body);
     var personId = req.body.personId;
     var name = req.body.name;
     var username = req.body.username;

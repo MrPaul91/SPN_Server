@@ -23,6 +23,8 @@
     "express": "^4.16.2",
     "jsonwebtoken": "^8.1.0",
     "mysql": "^2.15.0",
-    "request-ip": "^2.0.2"
+    "raw-body": "^2.3.2",
+    "request-ip": "^2.0.2",
+    "sql-injection": "0.0.6"
   }
 }

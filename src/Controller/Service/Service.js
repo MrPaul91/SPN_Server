@@ -1,9 +1,11 @@
 import express from 'express';
+import injection from './injection.js';
 import bodyParser from 'body-parser';
 import LogIn from '../Query/LogIn.js';
 import InsertUser from '../Insert/InsertUser.js';
 import InsertImage from '../Insert/InsertImage.js';
 import InsertAlbum from '../Insert/InsertAlbum.js';
+import CopyImage from '../Insert/CopyImage.js';
 import GetAlbums from '../Query/GetAlbums.js';
 import GetAlbumsOfOtherUser from '../Query/GetAlbumsOfOtherUser.js';
 import GetImagesOfAnAlbum from '../Query/GetImagesOfAnAlbum.js';
@@ -19,7 +21,9 @@ export default class Service {
 
     start() {
 
+        //this.app.use(sqlinjection);
         this.app.use(bodyParser.json({ limit: '50mb' }));
+        this.app.use(injection);
         this.app.use(cookieParser());
         this.app.use(function (req, res, next) {
             res.header("Access-Control-Allow-Origin", "*");
@@ -34,7 +38,7 @@ export default class Service {
         this.app.post('/GetAlbums', GetAlbums); //Bien
 
         this.app.post('/GetAlbumsOfOtherUser', GetAlbumsOfOtherUser);
-        
+        this.app.post('/CopyImage', CopyImage);
         this.app.post('/GetImagesOfAnAlbum', GetImagesOfAnAlbum); //Bien
         this.app.get('/Image/Profile/:name', ProfileImage);//Bien
         this.app.get('/Image/Album/:name', AlbumImage);//Bien

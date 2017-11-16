@@ -17,8 +17,6 @@ export default class Image {
         var db = new DataBaseConnection();
         var newImage = new Image(photo, description, title, comment, user);
 
-        console.log(newImage);
-
         if (newImage.validateImage()) {
 
             try {

@@ -124,40 +124,37 @@ var Image = function () {
                                 db = new _DataBaseConnection2.default();
                                 newImage = new Image(photo, description, title, comment, user);
 
-
-                                console.log(newImage);
-
                                 if (!newImage.validateImage()) {
-                                    _context.next = 16;
+                                    _context.next = 15;
                                     break;
                                 }
 
-                                _context.prev = 4;
-                                _context.next = 7;
+                                _context.prev = 3;
+                                _context.next = 6;
                                 return db.insertImage(newImage);
 
-                            case 7:
+                            case 6:
                                 result = _context.sent;
                                 return _context.abrupt('return', result);
 
-                            case 11:
-                                _context.prev = 11;
-                                _context.t0 = _context['catch'](4);
+                            case 10:
+                                _context.prev = 10;
+                                _context.t0 = _context['catch'](3);
                                 return _context.abrupt('return', { 'error': _context.t0 });
 
-                            case 14:
-                                _context.next = 17;
+                            case 13:
+                                _context.next = 16;
                                 break;
 
-                            case 16:
+                            case 15:
                                 return _context.abrupt('return', { 'error': _ErrorConstants2.default.invalid_image_information });
 
-                            case 17:
+                            case 16:
                             case 'end':
                                 return _context.stop();
                         }
                     }
-                }, _callee, this, [[4, 11]]);
+                }, _callee, this, [[3, 10]]);
             }));
 
             function create(_x, _x2, _x3, _x4, _x5) {

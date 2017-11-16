@@ -37,8 +37,6 @@ exports.default = function () {
             while (1) {
                 switch (_context.prev = _context.next) {
                     case 0:
-
-                        console.log(req.body);
                         personId = req.body.personId;
                         name = req.body.name;
                         username = req.body.username;
@@ -48,14 +46,14 @@ exports.default = function () {
                         newUser = new _User2.default(personId, name, username, avatar, password, email, 'REGULAR');
 
                         if (!(newUser.validatePerson() && newUser.validateUser())) {
-                            _context.next = 15;
+                            _context.next = 14;
                             break;
                         }
 
-                        _context.next = 11;
+                        _context.next = 10;
                         return newUser.insertUser();
 
-                    case 11:
+                    case 10:
                         result = _context.sent;
 
 
@@ -64,19 +62,19 @@ exports.default = function () {
                         } else {
                             res.status(result.error.statusCode).send((0, _stringify2.default)({ "error": result.error.name }));
                         }
-                        _context.next = 19;
+                        _context.next = 18;
                         break;
 
-                    case 15:
-                        _context.next = 17;
+                    case 14:
+                        _context.next = 16;
                         return (0, _stringify2.default)({ 'error': [_ErrorConstants2.default.missing_information.name] });
 
-                    case 17:
+                    case 16:
                         result = _context.sent;
 
                         res.status(_ErrorConstants2.default.missing_information.statusCode).send(result);
 
-                    case 19:
+                    case 18:
                     case 'end':
                         return _context.stop();
                 }
